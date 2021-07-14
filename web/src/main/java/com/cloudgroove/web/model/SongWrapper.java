@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SongList {
+public class SongWrapper {
     @JsonProperty("songs")
     List<Song> songs;
 }

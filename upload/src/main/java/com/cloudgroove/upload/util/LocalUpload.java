@@ -1,6 +1,5 @@
 package com.cloudgroove.upload.util;
 
-import com.cloudgroove.upload.model.AudioFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -20,18 +19,18 @@ public class LocalUpload implements UploadService
         return true;
     }
 
-    public boolean upload (MultipartFile file)
+    public String upload (MultipartFile file)
     {
         try {
-            File newFile = new File (uploadPath + "/" + file.getOriginalFilename() + ".mp3");
+            File newFile = new File (uploadPath + "/" + file.getOriginalFilename());
             // Create newFile if it doesn't already exist
             if (!newFile.exists()) newFile.createNewFile();
             file.transferTo(newFile);
-            return true;
+            return file.getOriginalFilename();
         }
         catch (Exception e) {
             System.out.println (e);
-            return false;
+            return null;
         }
     }
 }

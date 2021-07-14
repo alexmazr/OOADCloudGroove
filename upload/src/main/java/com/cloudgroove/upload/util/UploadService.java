@@ -6,5 +6,5 @@ public interface UploadService
 {
     // Allows credentials to be passed
     public boolean init ();
-    public boolean upload (MultipartFile file);
+    public String upload (MultipartFile file);
 }

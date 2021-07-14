@@ -16,7 +16,5 @@ public class User {
     String name;
     @JsonProperty("userId")
     String userId;
-    @JsonProperty("playlists")
-    List<Playlist> playlists;
 
 }
