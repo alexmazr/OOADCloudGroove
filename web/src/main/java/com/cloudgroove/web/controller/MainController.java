@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Controller
 @Slf4j
 public class MainController
@@ -77,34 +79,24 @@ public class MainController
     public String createNewPlaylist (@PathVariable("userID") String userID, Model model) { return "index"; }
 
     @PostMapping("/user/{userID}/playlist/{playlistID}/{playlistName}/upload")
-    public String upload (@PathVariable("playlistID") String playlistId, @PathVariable("playlistName") String playlistName, @RequestParam("newUpload") MultipartFile file, Model model)
-    {
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Create HTTP header
+    public String upload (@PathVariable("playlistID") String playlistId, @PathVariable("playlistName") String playlistName, @RequestParam("newUpload") MultipartFile file, Model model) throws IOException {
+        //Set the header to be multipart form data
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        // Attempt to get a file and add it to our request body, return error if it fails
-        LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        // Add the file resource to the body
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", file.getResource());
 
-        // Attempt to add the file as a ByteArrayResource
-        try { body.add("file", new ByteArrayResource(file.getBytes())); }
-        catch (Exception e) {
-            System.out.println(e);
-            return "error";
-        }
+        // Create the request entity
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        // Add other file meta-data
-        body.add ("name", file.getOriginalFilename());
-        body.add ("size", file.getSize());
+        // Send the file resource to the upload service
+        RestTemplate restTemplate = new RestTemplate();
+        String serverUrl = "http://"+uploadServiceIp+":"+uploadServicePort+"/api/upload/";
+        ResponseEntity<String> response = restTemplate.postForEntity(serverUrl, requestEntity, String.class);
 
-        // Create a new HttpEntity
-        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
-
-        // Send the post request to our API
-        HttpStatus result = restTemplate.postForObject("http://"+uploadServiceIp+":"+uploadServicePort+"/api/upload/", request, HttpStatus.class);
-        System.out.println(result);
+        // TODO: change rendering based on response
         return "index";
     }
 
