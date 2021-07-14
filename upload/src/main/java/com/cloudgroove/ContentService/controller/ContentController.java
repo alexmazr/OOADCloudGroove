@@ -1,13 +1,13 @@
-package com.cloudgroove.upload.controller;
+package com.cloudgroove.ContentService.controller;
 
-import com.cloudgroove.upload.util.LocalUpload;
-import com.cloudgroove.upload.util.UploadService;
-import com.cloudgroove.upload.util.UploadServiceFactory;
+import com.cloudgroove.ContentService.util.DeliveryService;
+import com.cloudgroove.ContentService.util.DeliveryServiceFactory;
+import com.cloudgroove.ContentService.util.UploadService;
+import com.cloudgroove.ContentService.util.UploadServiceFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +15,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-public class UploadController
+public class ContentController
 {
 
     @Value("${cloudgroove.upload.provider}")
-    private String uploadProvider;
+    private String provider;
 
     @Value("${cloudgroove.localservice.ip}")
     private String localServiceIp;
@@ -27,15 +27,13 @@ public class UploadController
     @Value("${cloudgroove.songservice.port}")
     private Integer songServicePort;
 
-
-
     @RequestMapping(path = "/api/upload", method = RequestMethod.POST)
     public HttpStatus uploadPost (@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("artist") String artist, @RequestParam("userId") String userId)
     {
         // Attempt to perform the file upload
-        UploadService uploader = UploadServiceFactory.create (uploadProvider);
+        UploadService uploader = UploadServiceFactory.create (provider);
         uploader.init ();
-        String path = uploader.upload (file);
+        String path = uploader.upload (file, userId);
         if (path == null ) return HttpStatus.BAD_REQUEST;
 
         // Attempt to upload file metadata to the playlist API
@@ -50,5 +48,14 @@ public class UploadController
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.postForObject("http://"+localServiceIp+":"+songServicePort+"/api/add/song/", requestEntity,String.class);
         return HttpStatus.ACCEPTED;
+    }
+
+    @RequestMapping(path = "/api/user/{userId}/download/{fileName}", method = RequestMethod.GET)
+    public String downloadGet (@PathVariable("userId") String userId, @PathVariable("fileName") String fileName)
+    {
+        // Attempt to get the content URL
+        DeliveryService delivery = DeliveryServiceFactory.create (provider);
+        delivery.init ();
+        return delivery.download(userId, fileName);
     }
 }

@@ -58,7 +58,6 @@ public class SongController {
             }
             return new SongWrapper(songs);
         }
-
         else return null;
     }
 
@@ -66,6 +65,18 @@ public class SongController {
     public Song getSong (@PathVariable("song_id") String song_id)
     {
         return songRepository.findBySongId(song_id);
+    }
+
+    @RequestMapping(value ="/api/user/{userId}/song/{fileName}")
+    public Song getSongByName (@PathVariable("userId") String userId, @PathVariable("fileName") String fileName)
+    {
+        return songRepository.findByOwnerIdAndFilepath(userId, fileName);
+    }
+
+    @RequestMapping(value ="/api/user/{userId}/songs")
+    public List<Song> getSongsByOwner (@PathVariable("userId") String userId)
+    {
+        return songRepository.findByOwnerId(userId);
     }
 
     @RequestMapping(value ="/api/add/playlist/")

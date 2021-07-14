@@ -3,6 +3,7 @@ package com.cloudgroove.web.controller;
 
 import com.cloudgroove.web.model.PlaylistItemWrapper;
 import com.cloudgroove.web.model.PlaylistWrapper;
+import com.cloudgroove.web.model.Song;
 import com.cloudgroove.web.model.SongWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -52,8 +54,10 @@ public class MainController
     {
         RestTemplate restTemplate = new RestTemplate();
         PlaylistWrapper playlists = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlists/" +userID, PlaylistWrapper.class);
+        List<Song> songs = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userID+"/songs", List.class);
 
         model.addAttribute("playlists", playlists.getPlaylists());
+        model.addAttribute("songs", songs);
         model.addAttribute("userID", userID);
 
         return "userHome";
@@ -97,16 +101,42 @@ public class MainController
         // Send the file resource to the upload service
         RestTemplate restTemplate = new RestTemplate();
         String serverUrl = "http://"+localServiceIp+":"+uploadServicePort+"/api/upload/";
-        ResponseEntity<String> response = restTemplate.postForEntity(serverUrl, requestEntity, String.class);
+        HttpStatus response = restTemplate.postForObject(serverUrl, requestEntity, HttpStatus.class);
+        return "redirect:/user/" + userID;
+    }
 
-        // TODO: change rendering based on response
-        return "index";
+    @GetMapping("/user/{userId}/song/{fileName}")
+    public String userSongPlayer (@PathVariable("userId") String userId, @PathVariable("fileName") String fileName, Model model)
+    {
+        RestTemplate restTemplate = new RestTemplate();
+        String serverUrl = "http://"+localServiceIp+":"+uploadServicePort+"/api/user/"+userId+"/download/"+fileName;
+        String response = restTemplate.getForObject(serverUrl, String.class);
+        model.addAttribute("songLink", response);
+
+        PlaylistWrapper playlists = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlists/" +userId, PlaylistWrapper.class);
+        List<Song> songs = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userId+"/songs", List.class);
+
+        model.addAttribute("playlists", playlists.getPlaylists());
+        model.addAttribute("songs", songs);
+        model.addAttribute("userID", userId);
+
+        return "userHome";
     }
 
     @PostMapping("/login")
-    public String userLogin (Model model)
+    public String userLogin (@RequestParam("email") String email, @RequestParam("password") String password, Model model)
     {
-        return "index";
+        HttpHeaders headers = new HttpHeaders();
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("email", email);
+        body.add("password", password);
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String serverUrl = "http://"+localServiceIp+":"+userServicePort+"/api/login/";
+        String response = restTemplate.postForObject(serverUrl, request, String.class);
+        if (response.equals("failure-dne") || response.equals("failure-password")) return "index";
+        else return "redirect:/user/" + response;
     }
 
     @PostMapping("/signup")
@@ -125,10 +155,4 @@ public class MainController
         else return "redirect:/user/" + response;
     }
 
-//    @GetMapping("/greetings/{name}")
-//    public String indexPage (@PathVariable("name") String name, Model model)
-//    {
-//        model.addAttribute(name);
-//        return "name";
-//    }
 }

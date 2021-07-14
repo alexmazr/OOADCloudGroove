@@ -37,7 +37,7 @@ public class UserController
         return newUser.getUserId();
     }
 
-    @RequestMapping(path = "/api/login", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/login", method = RequestMethod.POST)
     public String userLogin (@RequestParam("email") String email, @RequestParam("password") String password) {
 
         User newUser = userRepository.findUserByEmail(email);

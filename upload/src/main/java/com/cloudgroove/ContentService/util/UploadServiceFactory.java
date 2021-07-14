@@ -1,4 +1,4 @@
-package com.cloudgroove.upload.util;
+package com.cloudgroove.ContentService.util;
 
 public class UploadServiceFactory
 {
