@@ -17,7 +17,7 @@ public class LocalUpload implements UploadService
         return true;
     }
 
-    public String upload (MultipartFile file, String userId)
+    public boolean upload (MultipartFile file, String userId, String songId)
     {
         try {
             File userDir = new File (uploadPath + "/"+userId);
@@ -28,11 +28,11 @@ public class LocalUpload implements UploadService
             if (!newFile.exists()) newFile.createNewFile();
             // Transfer the multipart file into the local file
             file.transferTo(newFile);
-            return file.getOriginalFilename();
+            return true;
         }
         catch (Exception e) {
             System.out.println (e);
-            return null;
+            return false;
         }
     }
 }

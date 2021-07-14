@@ -67,10 +67,10 @@ public class SongController {
         return songRepository.findBySongId(song_id);
     }
 
-    @RequestMapping(value ="/api/user/{userId}/song/{fileName}")
-    public Song getSongByName (@PathVariable("userId") String userId, @PathVariable("fileName") String fileName)
+    @RequestMapping(value ="/api/user/{userId}/song/{title}")
+    public Song getSongByName (@PathVariable("userId") String userId, @PathVariable("title") String title)
     {
-        return songRepository.findByOwnerIdAndFilepath(userId, fileName);
+        return songRepository.findByOwnerIdAndTitle(userId, title);
     }
 
     @RequestMapping(value ="/api/user/{userId}/songs")
@@ -95,17 +95,22 @@ public class SongController {
     @RequestMapping(value ="/api/add/song/")
     public String addSong (@RequestParam("title") String title, @RequestParam("artist") String artist, @RequestParam("filepath") String filepath, @RequestParam("ownerId") String ownerId)
     {
-        // Add song to database
-        songRepository.save(
-                Song.builder()
-                        .title(title)
-                        .artist(artist)
-                        .filepath(filepath)
-                        .ownerId(ownerId)
-                        .build()
-        );
+        // Prevent duplicate titles
+        if (songRepository.findByOwnerIdAndTitle(ownerId, title) != null) return "duplicate";
 
-        return "success";
+        // Build a new song
+        Song newSong = Song.builder()
+                .title(title)
+                .artist(artist)
+                .filepath(filepath)
+                .ownerId(ownerId)
+                .build();
+
+        // Add song to database
+        songRepository.save(newSong);
+
+        // Return the song ID
+        return newSong.getSongId();
     }
 
 

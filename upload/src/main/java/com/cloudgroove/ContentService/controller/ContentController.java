@@ -30,32 +30,34 @@ public class ContentController
     @RequestMapping(path = "/api/upload", method = RequestMethod.POST)
     public HttpStatus uploadPost (@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("artist") String artist, @RequestParam("userId") String userId)
     {
-        // Attempt to perform the file upload
-        UploadService uploader = UploadServiceFactory.create (provider);
-        uploader.init ();
-        String path = uploader.upload (file, userId);
-        if (path == null ) return HttpStatus.BAD_REQUEST;
-
-        // Attempt to upload file metadata to the playlist API
+        // Create a request for the song microservice to add song metadata to our database
         HttpHeaders headers = new HttpHeaders();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("title", title);
         body.add("artist", artist);
-        body.add("filepath", path);
+        body.add("filepath", file.getOriginalFilename());
         body.add("ownerId", userId);
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
+        // Put request to song microservice
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.postForObject("http://"+localServiceIp+":"+songServicePort+"/api/add/song/", requestEntity,String.class);
+        String songId = restTemplate.postForObject("http://"+localServiceIp+":"+songServicePort+"/api/add/song/", requestEntity,String.class);
+
+        // Attempt to perform the file upload
+        UploadService uploader = UploadServiceFactory.create (provider);
+        uploader.init ();
+        boolean status = uploader.upload (file, userId, songId);
+
+        if (status == false ) return HttpStatus.BAD_REQUEST;
         return HttpStatus.ACCEPTED;
     }
 
-    @RequestMapping(path = "/api/user/{userId}/download/{fileName}", method = RequestMethod.GET)
-    public String downloadGet (@PathVariable("userId") String userId, @PathVariable("fileName") String fileName)
+    @RequestMapping(path = "/api/user/{userId}/download/{songId}", method = RequestMethod.GET)
+    public String downloadGet (@PathVariable("userId") String userId, @PathVariable("songId") String songId)
     {
         // Attempt to get the content URL
         DeliveryService delivery = DeliveryServiceFactory.create (provider);
         delivery.init ();
-        return delivery.download(userId, fileName);
+        return delivery.download(userId, songId);
     }
 }

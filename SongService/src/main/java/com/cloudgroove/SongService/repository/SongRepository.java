@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface SongRepository extends JpaRepository<Song, String> {
     Song findBySongId(String songId);
-    Song findByOwnerIdAndFilepath(String ownerId, String filePath);
+    Song findByOwnerIdAndTitle(String ownerId, String title);
     List<Song> findByOwnerId(String ownerId);
 }

@@ -109,10 +109,14 @@ public class MainController
     public String userSongPlayer (@PathVariable("userId") String userId, @PathVariable("fileName") String fileName, Model model)
     {
         RestTemplate restTemplate = new RestTemplate();
-        String serverUrl = "http://"+localServiceIp+":"+uploadServicePort+"/api/user/"+userId+"/download/"+fileName;
-        String response = restTemplate.getForObject(serverUrl, String.class);
-        model.addAttribute("songLink", response);
+        // First, get the songId from the song that belongs to this user and has this filename
+        Song song = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userId+"/song/"+fileName, Song.class);
+        // Ask the content service for the song link
+        String songLink = restTemplate.getForObject("http://"+localServiceIp+":"+uploadServicePort+"/api/user/"+userId+"/download/"+song.getSongId(), String.class);
+        // Add the song link to the model
+        model.addAttribute("songLink", songLink);
 
+        // Load other data for the userHome page
         PlaylistWrapper playlists = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlists/" +userId, PlaylistWrapper.class);
         List<Song> songs = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userId+"/songs", List.class);
 
