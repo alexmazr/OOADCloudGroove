@@ -115,6 +115,7 @@ public class MainController
         String songLink = restTemplate.getForObject("http://"+localServiceIp+":"+uploadServicePort+"/api/user/"+userId+"/download/"+song.getSongId(), String.class);
         // Add the song link to the model
         model.addAttribute("songLink", songLink);
+        model.addAttribute("songTitle", fileName);
 
         // Load other data for the userHome page
         PlaylistWrapper playlists = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlists/" +userId, PlaylistWrapper.class);
