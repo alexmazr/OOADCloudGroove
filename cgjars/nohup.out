@@ -1,0 +1,169 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.2)
+
+2021-07-20 17:35:57.487  INFO 6464 --- [           main] c.c.C.ContentServiceApplication          : Starting ContentServiceApplication using Java 16.0.2 on DESKTOP-V28GSQS with PID 6464 (C:\Users\alexm\Documents\cgjars\upload-0.0.1-SNAPSHOT.jar started by alexm in C:\Users\alexm\Documents\cgjars)
+2021-07-20 17:35:57.494  INFO 6464 --- [           main] c.c.C.ContentServiceApplication          : No active profile set, falling back to default profi2021-07-20 17:2021-07-20 17:36:10.304  INFO 6464 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8082 (http)
+2021-07-20 17:36:10.335  INFO 6464 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-07-20 17:36:10.335  INFO 6464 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.48]
+2021-07-20 17:36:10.898  INFO 6464 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-07-20 17:36:10.898  INFO 6464 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed2021-07-20 17:2021-07-20 17:36:17.986  INFO 6464 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2021-07-20 17:36:18.890  INFO 6464 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8082 (http) with context path ''
+2021-07-20 17:36:18.936  INFO 6464 --- [           main] c.c.C.ContentServiceApplication          : Started ContentServiceApplication i2021-07-20 17:36:45.936  INFO 3268 --- [nio2021-07-20 17:37:07.935  INFO 6464 --- [nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-20 17:37:07.935  INFO 6464 --- [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-07-20 17:37:07.936  INFO 6464 --- [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+INFO 2132 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-07-20 17:36:07.712  INFO 2132 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.48]
+2021-07-20 17:36:08.146  INFO 2132 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-07-20 17:36:08.146  INFO 2132 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 12019 ms
+2021-07-20 17:36:10.851  INFO 2132 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-07-20 17:36:11.383  INFO 2132 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-07-20 17:36:12.414  INFO 2132 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-07-20 17:36:12.961  INFO 2132 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-07-20 17:36:15.793  INFO 2132 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-07-20 17:36:15.840  INFO 2132 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL81Dialect
+2021-07-20 17:36:20.124  INFO 2132 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-07-20 17:36:20.140  INFO 2132 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-07-20 17:36:26.734  INFO 2132 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8083 (http) with context path ''
+2021-07-20 17:36:26.765  INFO 2132 --- [           main] c.c.userservice.UserServiceApplication   : Started UserServiceApplication in 34.376 seconds (JVM running for 38.553)
+2021-07-20 17:36:55.913  INFO 2132 --- [nio-8083-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-20 17:36:55.913  INFO 2132 --- [nio-8083-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-07-20 17:36:55.915  INFO 2132 --- [nio-8083-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+Hibernate: 
+    select
+        user0_.user_id as user_id1_0_,
+        user0_.email as email2_0_,
+        user0_.password as password3_0_ 
+    from
+        playlist.user user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    select
+        user0_.user_id as user_id1_0_0_,
+        user0_.email as email2_0_0_,
+        user0_.password as password3_0_0_ 
+    from
+        playlist.user user0_ 
+    where
+        user0_.user_id=?
+Hibernate: 
+    insert 
+    into
+        playlist.user
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2021-07-20 17:36:27.096  INFO 3468 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2021-07-20 17:36:27.127  INFO 3468 --- [           main] c.c.SongService.SongServiceApplication   : Started SongServiceApplication in 35.12 seconds (JVM running for 38.938)
+2021-07-20 17:36:57.109  INFO 3468 --- [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-20 17:36:57.109  INFO 3468 --- [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-07-20 17:36:57.110  INFO 3468 --- [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Hibernate: 
+    select
+        playlist0_.playlist_id as playlist1_0_,
+        playlist0_.name as name2_0_,
+        playlist0_.owner_id as owner_id3_0_ 
+    from
+        playlist.playlist playlist0_ 
+    where
+        playlist0_.owner_id=?
+Hibernate: 
+    select
+        song0_.song_id as song_id1_2_,
+        song0_.artist as artist2_2_,
+        song0_.filepath as filepath3_2_,
+        song0_.owner_id as owner_id4_2_,
+        song0_.title as title5_2_ 
+    from
+        playlist.song song0_ 
+    where
+        song0_.owner_id=?
+Hibernate: 
+    select
+        song0_.song_id as song_id1_2_,
+        song0_.artist as artist2_2_,
+        song0_.filepath as filepath3_2_,
+        song0_.owner_id as owner_id4_2_,
+        song0_.title as title5_2_ 
+    from
+        playlist.song song0_ 
+    where
+        song0_.owner_id=? 
+        and song0_.title=?
+Hibernate: 
+    select
+        song0_.song_id as song_id1_2_0_,
+        song0_.artist as artist2_2_0_,
+        song0_.filepath as filepath3_2_0_,
+        song0_.owner_id as owner_id4_2_0_,
+        song0_.title as title5_2_0_ 
+    from
+        playlist.song song0_ 
+    where
+        song0_.song_id=?
+Hibernate: 
+    insert 
+    into
+        playlist.song
+        (artist, filepath, owner_id, title, song_id) 
+    values
+        (?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        playlist0_.playlist_id as playlist1_0_,
+        playlist0_.name as name2_0_,
+        playlist0_.owner_id as owner_id3_0_ 
+    from
+        playlist.playlist playlist0_ 
+    where
+        playlist0_.owner_id=?
+Hibernate: 
+    select
+        song0_.song_id as song_id1_2_,
+        song0_.artist as artist2_2_,
+        song0_.filepath as filepath3_2_,
+        song0_.owner_id as owner_id4_2_,
+        song0_.title as title5_2_ 
+    from
+        playlist.song song0_ 
+    where
+        song0_.owner_id=?
+Hibernate: 
+    select
+        song0_.song_id as song_id1_2_,
+        song0_.artist as artist2_2_,
+        song0_.filepath as filepath3_2_,
+        song0_.owner_id as owner_id4_2_,
+        song0_.title as title5_2_ 
+    from
+        playlist.song song0_ 
+    where
+        song0_.owner_id=? 
+        and song0_.title=?
+Hibernate: 
+    select
+        playlist0_.playlist_id as playlist1_0_,
+        playlist0_.name as name2_0_,
+        playlist0_.owner_id as owner_id3_0_ 
+    from
+        playlist.playlist playlist0_ 
+    where
+        playlist0_.owner_id=?
+Hibernate: 
+    select
+        song0_.song_id as song_id1_2_,
+        song0_.artist as artist2_2_,
+        song0_.filepath as filepath3_2_,
+        song0_.owner_id as owner_id4_2_,
+        song0_.title as title5_2_ 
+    from
+        playlist.song song0_ 
+    where
+        song0_.owner_id=?
