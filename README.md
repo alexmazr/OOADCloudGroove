@@ -14,4 +14,7 @@ Under the package name you will find the microservices main method (or entry poi
 
 There are two ways to run this project. You may download the `cgjars` directory and run the `run.sh` script in a CLI that has a JDK installed. This will require opening a browser at localhost:8080 and an internet connection. It might take a few minutes for the project to start running it using this method. Note: Downloading the source code and running it yourself will NOT work. You must use the jar files we provided. The reason is that the code in this repository is configured to use AWS services, that require keys that are NOT included in this repository. 
 
-Alternatively you may access our project running at http://13.58.108.211:8080/. This is the recommened way to interface with our project, as it does not matter what computer and environemnt you have setup. As long as you have a modern webbrowser with an internet connection you are good to go.
+Alternatively you may access our project running at http://13.58.108.211:8080/. This is the recommened way to interface with our project, as it does not matter what computer and environemnt you have setup. As long as you have a modern webbrowser with an internet connection you are good to go. 
+
+*How to use our app*
+You can make an account with any random email or password, we don't verify that your email exists. You may upload any mp3 file that is under 20MB. We haven't tested uploading other audio formats. Some might work, but please just stick with mp3 files. 
