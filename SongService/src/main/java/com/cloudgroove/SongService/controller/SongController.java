@@ -29,6 +29,8 @@ public class SongController {
     @Autowired
     SongRepository songRepository;
 
+    // This function is under construction
+    // Should return a list of user playlists
     @RequestMapping(value ="/api/playlists/{user_id}")
     public PlaylistWrapper userPlaylistAPI (@PathVariable("user_id") String user_id)
     {
@@ -43,6 +45,8 @@ public class SongController {
         else return null;
     }
 
+    // Under Construction
+    // Should return the songs in a single playlist
     @RequestMapping(value ="/api/playlist/{playlist_id}")
     public SongWrapper playlistAPI (@PathVariable("playlist_id") String playlist_id) {
 
@@ -61,28 +65,33 @@ public class SongController {
         else return null;
     }
 
+    // Gets a single song by it's ID
     @RequestMapping(value ="/api/song/{song_id}")
     public Song getSong (@PathVariable("song_id") String song_id)
     {
         return songRepository.findBySongId(song_id);
     }
 
+    // Gets a users song by it's title
     @RequestMapping(value ="/api/user/{userId}/song/{title}")
     public Song getSongByName (@PathVariable("userId") String userId, @PathVariable("title") String title)
     {
         return songRepository.findByOwnerIdAndTitle(userId, title);
     }
 
+    // Returns a list of all the users songs
     @RequestMapping(value ="/api/user/{userId}/songs")
     public List<Song> getSongsByOwner (@PathVariable("userId") String userId)
     {
         return songRepository.findByOwnerId(userId);
     }
 
+    // Adds a new user playlist
     @RequestMapping(value ="/api/add/playlist/")
     public String addPlaylist (@RequestParam("user_id") String user_id, @RequestParam("name") String newName)
     {
         // Add playlist to database
+        // Uses a builder pattern
         playlistRepository.save(
                 Playlist.builder()
                 .name(newName)
@@ -92,13 +101,14 @@ public class SongController {
         return "success";
     }
 
+    // Adds a new song (just metadata about the song)
     @RequestMapping(value ="/api/add/song/")
     public String addSong (@RequestParam("title") String title, @RequestParam("artist") String artist, @RequestParam("filepath") String filepath, @RequestParam("ownerId") String ownerId)
     {
         // Prevent duplicate titles
         if (songRepository.findByOwnerIdAndTitle(ownerId, title) != null) return "duplicate";
 
-        // Build a new song
+        // Build a new song using builder pattern
         Song newSong = Song.builder()
                 .title(title)
                 .artist(artist)

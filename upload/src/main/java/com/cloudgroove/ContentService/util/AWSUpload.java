@@ -19,6 +19,9 @@ public class AWSUpload implements UploadService
 {
     private TransferManager tm;
 
+    // Use AWS S3 transfer manager.
+    // This allows us to set file size limits and synchronously wait for a file upload
+    // Note the transfer manager is using a singleton AWS credential object we created.
     public boolean init ()
     {
         tm = TransferManagerBuilder.standard()
@@ -30,6 +33,7 @@ public class AWSUpload implements UploadService
 
     public boolean upload (MultipartFile file, String userId, String songId)
     {
+        // Attempt to upload a file, catch all exceptions.
         try
         {
             ObjectMetadata objectMetadata = new ObjectMetadata();

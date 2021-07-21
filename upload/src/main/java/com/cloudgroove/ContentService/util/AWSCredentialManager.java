@@ -9,11 +9,12 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
+// A singleton that handles AWS S3 credentials
 public class AWSCredentialManager
 {
     private static AWSCredentials credentials = new BasicAWSCredentials(
-            "AKIA46PSHF3PA7ZSUB6F",
-            "6dWx2J0m7wEuHrcrxVlbIWErJQDFTzRqOyv3GXJQ"
+            "blind",
+            "blind"
     );
 
     private static String s3Bucket = "cloudgroove";

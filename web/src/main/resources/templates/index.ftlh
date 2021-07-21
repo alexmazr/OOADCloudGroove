@@ -1,6 +1,9 @@
 <#include "head.ftlh">
 <div class="d-flex justify-content-center">
     <div class="d-flex flex-column col-6 mt-4">
+        <div class="text-center">
+            <h1>Cloud Groove</h1>
+        </div>
         <form action="/login" method="post" id="userForm">
             <div class="form-group">
                 <label for="email">Email address</label>

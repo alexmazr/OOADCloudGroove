@@ -10,11 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class AWSDelivery implements DeliveryService
 {
 
+    // There is not initialization
     public boolean init ()
     {
         return true;
     }
 
+    // Returns a link where the client can locate the audio file they requested
     public String download (String userId, String songId)
     {
         return "https://dr8cw8qdn0201.cloudfront.net/" +userId+"/"+songId;

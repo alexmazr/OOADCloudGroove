@@ -18,6 +18,7 @@ public class UserController
     @Autowired
     UserRepository userRepository;
 
+    // Processes a user signup
     @RequestMapping(path = "/api/signup", method = RequestMethod.POST)
     public String userSignup (@RequestParam("email") String email, @RequestParam("password") String password) {
         if (userRepository.findUserByEmail(email) != null) return "failure-ae";
@@ -37,6 +38,7 @@ public class UserController
         return newUser.getUserId();
     }
 
+    // Processes a user login
     @RequestMapping(path = "/api/login", method = RequestMethod.POST)
     public String userLogin (@RequestParam("email") String email, @RequestParam("password") String password) {
 

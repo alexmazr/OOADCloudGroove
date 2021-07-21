@@ -52,10 +52,13 @@ public class MainController
     @GetMapping("/user/{userID}")
     public String userPage (@PathVariable("userID") String userID, Model model)
     {
+        // Load a user page
+        // Asked the user and song service for user and song data
         RestTemplate restTemplate = new RestTemplate();
         PlaylistWrapper playlists = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlists/" +userID, PlaylistWrapper.class);
         List<Song> songs = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userID+"/songs", List.class);
 
+        // Fills our a model and passes it to the correct view
         model.addAttribute("playlists", playlists.getPlaylists());
         model.addAttribute("songs", songs);
         model.addAttribute("userID", userID);
@@ -63,6 +66,7 @@ public class MainController
         return "userHome";
     }
 
+    // This method is for loading a specific users playlist
     @GetMapping("/user/{userID}/playlist/{playlistID}/{playlistName}")
     public String userHome (@PathVariable("playlistID") String playlistId, @PathVariable("playlistName") String playlistName, Model model)
     {
@@ -76,13 +80,13 @@ public class MainController
         return "playlist";
     }
 
+    // A placeholder for creating a new user playlist
     @PostMapping("/user/{userID}/new-playlist")
     public String createNewPlaylist (@PathVariable("userID") String userID, Model model) { return "index"; }
 
+    // This method asks the content service to upload a song
     @PostMapping("/user/upload")
     public String upload (@RequestParam("userID") String userID, @RequestParam("newUpload") MultipartFile file, @RequestParam("title") String title, @RequestParam("artist") String artist, Model model) throws IOException {
-
-        // TODO: Need to verify user session
 
         //Set the header to be multipart form data
         HttpHeaders headers = new HttpHeaders();
@@ -105,6 +109,7 @@ public class MainController
         return "redirect:/user/" + userID;
     }
 
+    // Ask the content service to download a song
     @GetMapping("/user/{userId}/song/{fileName}")
     public String userSongPlayer (@PathVariable("userId") String userId, @PathVariable("fileName") String fileName, Model model)
     {
@@ -128,15 +133,20 @@ public class MainController
         return "userHome";
     }
 
+    // Handles a user login request
     @PostMapping("/login")
     public String userLogin (@RequestParam("email") String email, @RequestParam("password") String password, Model model)
     {
+        // Fill out an HTTP request with login data
         HttpHeaders headers = new HttpHeaders();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("email", email);
+        // Password is plaintext, this is bad, if we had more time it wouldn't ne
         body.add("password", password);
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
 
+        // Ask the user service if the user logged in, if it was successful send
+        // the user to their page. Otherwise leave them on the login page.
         RestTemplate restTemplate = new RestTemplate();
         String serverUrl = "http://"+localServiceIp+":"+userServicePort+"/api/login/";
         String response = restTemplate.postForObject(serverUrl, request, String.class);
@@ -144,15 +154,18 @@ public class MainController
         else return "redirect:/user/" + response;
     }
 
+    // Process a user signup
     @PostMapping("/signup")
     public String userSignup (@RequestParam("email") String email, @RequestParam("password") String password, Model model)
     {
+        // Fill in an HTTP request with user signup data
         HttpHeaders headers = new HttpHeaders();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("email", email);
         body.add("password", password);
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
 
+        // Ask the user service the sign a new user up
         RestTemplate restTemplate = new RestTemplate();
         String serverUrl = "http://"+localServiceIp+":"+userServicePort+"/api/signup/";
         String response = restTemplate.postForObject(serverUrl, request, String.class);

@@ -27,6 +27,7 @@ public class ContentController
     @Value("${cloudgroove.songservice.port}")
     private Integer songServicePort;
 
+    // Function that uploads a file
     @RequestMapping(path = "/api/upload", method = RequestMethod.POST)
     public HttpStatus uploadPost (@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("artist") String artist, @RequestParam("userId") String userId)
     {
@@ -44,6 +45,8 @@ public class ContentController
         String songId = restTemplate.postForObject("http://"+localServiceIp+":"+songServicePort+"/api/add/song/", requestEntity,String.class);
 
         // Attempt to perform the file upload
+        // This uses a factory pattern, which allows us to set who our cloud provider is in
+        // application settings, instead of hardcoding a provider.
         UploadService uploader = UploadServiceFactory.create (provider);
         uploader.init ();
         boolean status = uploader.upload (file, userId, songId);
@@ -56,6 +59,7 @@ public class ContentController
     public String downloadGet (@PathVariable("userId") String userId, @PathVariable("songId") String songId)
     {
         // Attempt to get the content URL
+        // Uses a factory pattern to avoid hardcoding a cloud provider
         DeliveryService delivery = DeliveryServiceFactory.create (provider);
         delivery.init ();
         return delivery.download(userId, songId);
