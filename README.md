@@ -14,4 +14,4 @@ Under the package name you will find the microservices main method (or entry poi
 
 There are two ways to run this project. You may download the `cgjars` directory and run the `run.sh` script in a CLI that has a JDK installed. This will require opening a browser at localhost:8080 and an internet connection. It might take a few minutes for the project to start running it using this method. 
 
-Alternatively you may access our project running at http://13.58.108.211:8080/. 
+Alternatively you may access our project running at http://13.58.108.211:8080/. This is the recommened way to interface with our project, as it does not matter what computer and environemnt you have setup. As long as you have a modern webbrowser with an internet connection you are good to go.
