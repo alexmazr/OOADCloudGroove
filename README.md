@@ -17,4 +17,5 @@ There are two ways to run this project. You may download the `cgjars` directory 
 Alternatively you may access our project running at http://13.58.108.211:8080/. This is the recommened way to interface with our project, as it does not matter what computer and environemnt you have setup. As long as you have a modern webbrowser with an internet connection you are good to go. 
 
 *How to use our app*
+
 You can make an account with any random email or password, we don't verify that your email exists. You may upload any mp3 file that is under 20MB. We haven't tested uploading other audio formats. Some might work, but please just stick with mp3 files. 
