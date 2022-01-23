@@ -23,7 +23,7 @@ public class ContentController
 
     private final String songServiceHost = System.getenv().getOrDefault("SONGSERVICE_HOST", "NONE");
     private final Integer songServicePort = Integer.parseInt(System.getenv().getOrDefault("SONGSERVICE_PORT", "0"));
-
+    
     // Function that uploads a file
     @RequestMapping(path = "/api/upload", method = RequestMethod.POST)
     public HttpStatus uploadPost (@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("artist") String artist, @RequestParam("userId") String userId)

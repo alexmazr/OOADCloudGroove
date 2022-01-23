@@ -34,7 +34,6 @@ public class MainController
     private final String songServiceHost = System.getenv().getOrDefault("SONGSERVICE_HOST", "NONE");
     private final String uploadServiceHost = System.getenv().getOrDefault("UPLOADSERVICE_HOST", "NONE");
     private final String userServiceHost = System.getenv().getOrDefault("USERSERVICE_HOST", "NONE");
-
     private final Integer songServicePort = Integer.parseInt(System.getenv().getOrDefault("SONGSERVICE_PORT", "0"));
     private final Integer uploadServicePort = Integer.parseInt(System.getenv().getOrDefault("UPLOADSERVICE_PORT", "0"));
     private final Integer userServicePort = Integer.parseInt(System.getenv().getOrDefault("USERSERVICE_PORT", "0"));
@@ -77,7 +76,6 @@ public class MainController
     public String userHome (@PathVariable("playlistID") String playlistId, @PathVariable("playlistName") String playlistName, Model model)
     {
         RestTemplate restTemplate = new RestTemplate();
-
         SongWrapper platlistItems = restTemplate.getForObject("http://"+songServiceHost+":"+songServicePort+"/api/playlist/" +playlistId, SongWrapper.class);
 
         model.addAttribute("songList", platlistItems.getSongs());
@@ -125,7 +123,7 @@ public class MainController
         // Ask the content service for the song link
         String songLink = restTemplate.getForObject("http://"+uploadServiceHost+":"+uploadServicePort+"/api/user/"+userId+"/download/"+song.getSongId(), String.class);
         // Add the song link to the model
-        model.addAttribute("songLink", songLink);
+        model.addAttribute("songLink", "/" + song.getOwnerId() + "/" + song.getFilepath());
         model.addAttribute("songTitle", fileName);
 
         // Load other data for the userHome page

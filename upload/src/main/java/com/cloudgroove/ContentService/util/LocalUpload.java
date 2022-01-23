@@ -11,10 +11,9 @@ public class LocalUpload implements UploadService
 
     public boolean init()
     {
-        //this.cwd = new File (System.getProperty("user.dir"));
-        //this.uploadPath = this.cwd.getParent();
+        this.cwd = new File (System.getProperty("user.dir"));
+        this.uploadPath = this.cwd.getParent();
         this.uploadPath = "/localUploads";
-        System.out.println("Filepath: " + this.uploadPath);
         return true;
     }
 
@@ -25,6 +24,7 @@ public class LocalUpload implements UploadService
             // Create local user dir if it does not exist
             if (!userDir.exists()) userDir.mkdir();
             File newFile = new File (uploadPath + "/"+userId+"/"+ file.getOriginalFilename());
+            System.out.println (uploadPath + "/"+userId+"/"+ file.getOriginalFilename());
             // Create newFile if it doesn't already exist
             if (!newFile.exists()) newFile.createNewFile();
             // Transfer the multipart file into the local file
