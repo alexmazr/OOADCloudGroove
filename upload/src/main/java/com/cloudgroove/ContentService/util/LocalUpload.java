@@ -11,9 +11,10 @@ public class LocalUpload implements UploadService
 
     public boolean init()
     {
-        this.cwd = new File (System.getProperty("user.dir"));
-        this.uploadPath = this.cwd.getParent();
-        this.uploadPath += "/localUploads";
+        //this.cwd = new File (System.getProperty("user.dir"));
+        //this.uploadPath = this.cwd.getParent();
+        this.uploadPath = "/localUploads";
+        System.out.println("Filepath: " + this.uploadPath);
         return true;
     }
 

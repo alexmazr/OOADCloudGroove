@@ -21,11 +21,8 @@ public class ContentController
     @Value("${cloudgroove.upload.provider}")
     private String provider;
 
-    @Value("${cloudgroove.localservice.ip}")
-    private String localServiceIp;
-
-    @Value("${cloudgroove.songservice.port}")
-    private Integer songServicePort;
+    private final String songServiceHost = System.getenv().getOrDefault("SONGSERVICE_HOST", "NONE");
+    private final Integer songServicePort = Integer.parseInt(System.getenv().getOrDefault("SONGSERVICE_PORT", "0"));
 
     // Function that uploads a file
     @RequestMapping(path = "/api/upload", method = RequestMethod.POST)
@@ -42,7 +39,7 @@ public class ContentController
 
         // Put request to song microservice
         RestTemplate restTemplate = new RestTemplate();
-        String songId = restTemplate.postForObject("http://"+localServiceIp+":"+songServicePort+"/api/add/song/", requestEntity,String.class);
+        String songId = restTemplate.postForObject("http://"+songServiceHost+":"+songServicePort+"/api/add/song/", requestEntity,String.class);
 
         // Attempt to perform the file upload
         // This uses a factory pattern, which allows us to set who our cloud provider is in

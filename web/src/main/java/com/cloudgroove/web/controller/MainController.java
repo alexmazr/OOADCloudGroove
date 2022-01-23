@@ -1,7 +1,8 @@
 package com.cloudgroove.web.controller;
 
 
-import com.cloudgroove.web.model.PlaylistItemWrapper;
+
+
 import com.cloudgroove.web.model.PlaylistWrapper;
 import com.cloudgroove.web.model.Song;
 import com.cloudgroove.web.model.SongWrapper;
@@ -28,21 +29,26 @@ import java.util.List;
 @Slf4j
 public class MainController
 {
-    @Value("${cloudgroove.localservice.ip}")
-    private String localServiceIp;
 
-    @Value("${cloudgroove.songservice.port}")
-    private Integer songServicePort;
+    private final String podName = System.getenv().getOrDefault("POD_NAME", "NONE");
+    private final String songServiceHost = System.getenv().getOrDefault("SONGSERVICE_HOST", "NONE");
+    private final String uploadServiceHost = System.getenv().getOrDefault("UPLOADSERVICE_HOST", "NONE");
+    private final String userServiceHost = System.getenv().getOrDefault("USERSERVICE_HOST", "NONE");
 
-    @Value("${cloudgroove.uploadservice.port}")
-    private Integer uploadServicePort;
-
-    @Value("${cloudgroove.userservice.port}")
-    private Integer userServicePort;
+    private final Integer songServicePort = Integer.parseInt(System.getenv().getOrDefault("SONGSERVICE_PORT", "0"));
+    private final Integer uploadServicePort = Integer.parseInt(System.getenv().getOrDefault("UPLOADSERVICE_PORT", "0"));
+    private final Integer userServicePort = Integer.parseInt(System.getenv().getOrDefault("USERSERVICE_PORT", "0"));
 
     @GetMapping("/")
-    public String indexPage ()
+    public String indexPage (Model model)
     {
+        model.addAttribute("POD_NAME", podName);
+        model.addAttribute("SONGSERVICE_HOST", songServiceHost);
+        model.addAttribute("UPLOADSERVICE_HOST", uploadServiceHost);
+        model.addAttribute("USERSERVICE_HOST", userServiceHost);
+        model.addAttribute("SONGSERVICE_PORT", songServicePort);
+        model.addAttribute("UPLOADSERVICE_PORT", uploadServicePort);
+        model.addAttribute("USERSERVICE_PORT", userServicePort);
         return "index";
     }
 
@@ -55,8 +61,8 @@ public class MainController
         // Load a user page
         // Asked the user and song service for user and song data
         RestTemplate restTemplate = new RestTemplate();
-        PlaylistWrapper playlists = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlists/" +userID, PlaylistWrapper.class);
-        List<Song> songs = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userID+"/songs", List.class);
+        PlaylistWrapper playlists = restTemplate.getForObject("http://"+songServiceHost+":"+songServicePort+"/api/playlists/" +userID, PlaylistWrapper.class);
+        List<Song> songs = restTemplate.getForObject("http://"+songServiceHost+":"+songServicePort+"/api/user/"+userID+"/songs", List.class);
 
         // Fills our a model and passes it to the correct view
         model.addAttribute("playlists", playlists.getPlaylists());
@@ -72,7 +78,7 @@ public class MainController
     {
         RestTemplate restTemplate = new RestTemplate();
 
-        SongWrapper platlistItems = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlist/" +playlistId, SongWrapper.class);
+        SongWrapper platlistItems = restTemplate.getForObject("http://"+songServiceHost+":"+songServicePort+"/api/playlist/" +playlistId, SongWrapper.class);
 
         model.addAttribute("songList", platlistItems.getSongs());
         model.addAttribute("playlistName", playlistName);
@@ -104,7 +110,7 @@ public class MainController
 
         // Send the file resource to the upload service
         RestTemplate restTemplate = new RestTemplate();
-        String serverUrl = "http://"+localServiceIp+":"+uploadServicePort+"/api/upload/";
+        String serverUrl = "http://"+uploadServiceHost+":"+uploadServicePort+"/api/upload/";
         HttpStatus response = restTemplate.postForObject(serverUrl, requestEntity, HttpStatus.class);
         return "redirect:/user/" + userID;
     }
@@ -115,16 +121,16 @@ public class MainController
     {
         RestTemplate restTemplate = new RestTemplate();
         // First, get the songId from the song that belongs to this user and has this filename
-        Song song = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userId+"/song/"+fileName, Song.class);
+        Song song = restTemplate.getForObject("http://"+songServiceHost+":"+songServicePort+"/api/user/"+userId+"/song/"+fileName, Song.class);
         // Ask the content service for the song link
-        String songLink = restTemplate.getForObject("http://"+localServiceIp+":"+uploadServicePort+"/api/user/"+userId+"/download/"+song.getSongId(), String.class);
+        String songLink = restTemplate.getForObject("http://"+uploadServiceHost+":"+uploadServicePort+"/api/user/"+userId+"/download/"+song.getSongId(), String.class);
         // Add the song link to the model
         model.addAttribute("songLink", songLink);
         model.addAttribute("songTitle", fileName);
 
         // Load other data for the userHome page
-        PlaylistWrapper playlists = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/playlists/" +userId, PlaylistWrapper.class);
-        List<Song> songs = restTemplate.getForObject("http://"+localServiceIp+":"+songServicePort+"/api/user/"+userId+"/songs", List.class);
+        PlaylistWrapper playlists = restTemplate.getForObject("http://"+songServiceHost+":"+songServicePort+"/api/playlists/" +userId, PlaylistWrapper.class);
+        List<Song> songs = restTemplate.getForObject("http://"+songServiceHost+":"+songServicePort+"/api/user/"+userId+"/songs", List.class);
 
         model.addAttribute("playlists", playlists.getPlaylists());
         model.addAttribute("songs", songs);
@@ -148,7 +154,7 @@ public class MainController
         // Ask the user service if the user logged in, if it was successful send
         // the user to their page. Otherwise leave them on the login page.
         RestTemplate restTemplate = new RestTemplate();
-        String serverUrl = "http://"+localServiceIp+":"+userServicePort+"/api/login/";
+        String serverUrl = "http://"+userServiceHost+":"+userServicePort+"/api/login/";
         String response = restTemplate.postForObject(serverUrl, request, String.class);
         if (response.equals("failure-dne") || response.equals("failure-password")) return "index";
         else return "redirect:/user/" + response;
@@ -167,7 +173,7 @@ public class MainController
 
         // Ask the user service the sign a new user up
         RestTemplate restTemplate = new RestTemplate();
-        String serverUrl = "http://"+localServiceIp+":"+userServicePort+"/api/signup/";
+        String serverUrl = "http://"+userServiceHost+":"+userServicePort+"/api/signup/";
         String response = restTemplate.postForObject(serverUrl, request, String.class);
         if (response.equals("failure-ae")) return "index";
         else return "redirect:/user/" + response;

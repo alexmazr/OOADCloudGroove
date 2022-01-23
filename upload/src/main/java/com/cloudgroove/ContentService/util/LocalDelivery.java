@@ -10,8 +10,9 @@ public class LocalDelivery implements DeliveryService
     public boolean init()
     {
         this.cwd = new File(System.getProperty("user.dir"));
-        this.uploadPath = "file://" + this.cwd.getParent();
+        //this.uploadPath = "file://" + this.cwd.getParent();
         this.uploadPath += "/localUploads";
+        System.out.println("Filepath: " + this.uploadPath);
         return true;
     }
 

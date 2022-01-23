@@ -1,4 +1,14 @@
 <#include "head.ftlh">
+<!--
+    SONGSERVICE_HOST ${POD_NAME}
+    SONGSERVICE_HOST ${SONGSERVICE_HOST}
+    USERSERVICE_HOST ${USERSERVICE_HOST}
+    UPLOADSERVICE_HOST ${UPLOADSERVICE_HOST}
+
+    SONGSERVICE_PORT ${SONGSERVICE_PORT}
+    USERSERVICE_PORT ${USERSERVICE_PORT}
+    UPLOADSERVICE_PORT ${UPLOADSERVICE_PORT}
+-->
 <div class="d-flex justify-content-center">
     <div class="d-flex flex-column col-6 mt-4">
         <div class="text-center">
