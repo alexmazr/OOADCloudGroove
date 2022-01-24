@@ -1,7 +1,7 @@
 # OOAD Final Project: CloudGroove
 Alex Mazur and Ryan Oliva
 
-##Kube Deployment:
+## Kube Deployment:
 
 ```
 cd ./infrastructure
