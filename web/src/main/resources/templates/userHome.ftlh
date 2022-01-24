@@ -4,7 +4,7 @@
         <div class="mb-4 d-flex justify-content-center">
             <#if songLink??>
             <div class="d-flex flex-column text-center">
-                <audio controls>
+                <audio controls autoplay>
                     <source src="${songLink}" type="audio/mp3">
                 </audio>
                 <h6>Currently Playing: ${songTitle}</h6>

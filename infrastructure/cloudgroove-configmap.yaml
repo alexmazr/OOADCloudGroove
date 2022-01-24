@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  songservice.host: songservice-service.default.svc.cluster.local
+  songservice.port: "8081"
+  uploadservice.host: uploadservice-service.default.svc.cluster.local
+  uploadservice.port: "8082"
+  userservice.host: userservice-service.default.svc.cluster.local
+  userservice.port: "8083"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2022-01-22T06:49:27Z"
+  name: cloudgroove-config
+  namespace: default
+  resourceVersion: "30796"
+  uid: 1e74b03f-979d-4674-9981-35fc03c1442a

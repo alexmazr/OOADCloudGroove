@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uploadservice-service
+  labels:
+    app: uploadservice-service
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8082
+    targetPort: 8082
+
+  selector:
+    app: uploadservice
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: uploadservice-statefulset
+spec:
+
+  serviceName: "upload-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uploadservice
+  template:
+    metadata:
+      labels:
+        app: uploadservice
+    spec:
+      containers:
+      - name: uploadservice
+        image: docker.io/charlescqian/cloudgroove-uploadservice
+        ports:
+        - containerPort: 8082
+          name: upload-service
+        volumeMounts:
+        - name: uploads
+          mountPath: /localUploads
+        env:
+          - name: SONGSERVICE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: cloudgroove-config
+                key: songservice.host
+          - name: SONGSERVICE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: cloudgroove-config
+                key: songservice.port
+  volumeClaimTemplates:
+  - metadata:
+      name: uploads
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 3Gi

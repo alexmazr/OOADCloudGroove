@@ -1,6 +1,17 @@
 # OOAD Final Project: CloudGroove
 Alex Mazur and Ryan Oliva
 
+Deployment:
+cd ./infrastructure
+minikube start
+kubectl apply -f cloudgroove-configmap.yaml
+kubectl apply -f postgres-statefulset.yaml
+kubectl apply -f songservice-deployment.yaml
+kubectl apply -f uploadservice-statefulset.yaml
+kubectl apply -f userservice-deployment.yaml
+kubectl apply -f web-deployment.yaml
+minikube service web-service
+
 Our demo video is hosted here: https://www.youtube.com/watch?v=8pSpZPVeVD4
 
 Our microservices live under the following directories:
